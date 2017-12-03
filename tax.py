@@ -115,7 +115,8 @@ class Cart(object):
 
     @classmethod
     def parse_input(cls, input_file):
-        reader = csv.DictReader(input_file)
+        headers = [h.strip() for h in input_file.next().split(",")]
+        reader = csv.DictReader(input_file, fieldnames=headers)
         items = []
         for row in reader:
             items.append(Item.from_dict(row))
