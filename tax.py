@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from __future__ import print_function
+from __future__ import print_function, division
 
 import csv
 import math
@@ -8,20 +8,31 @@ import argparse
 
 EXCEMPT_STOP_WORDS = ["food", "book", "chocolate", "pills", "medic"]
 
-def round_off(_accfloat, prec=0.05):
+def round_off(_accfloat, precsion=0.05):
     """
      Arguments:
        _accfloat: Number to be rounded off
        prec: Nearest digit to be rounded off
 
      >>> round_off(4.123)
-     4.1
+     4.15
      >>> round_off(4.131)
      4.15
      >>> round_off(4.331)
      4.35
     """
-    val = round(_accfloat/prec) * prec
+    prec = 1/precsion
+    val = round((_accfloat*prec)/prec, 2)
+    last_digit = int((val * 100) % 10)
+
+    if last_digit != 0:
+        if 1 <= last_digit < 5:
+            error = (5.0 - last_digit) / 100
+            val += error
+        elif 5 < last_digit <= 9:
+            error = (10 - last_digit) / 100
+            val += error
+    
     return float(str(val))
 
 class Item(object):
